@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +23,15 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    @Column(name="user_id")
+    private Long userId;
+
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+
+    @Column(name="last_name", nullable = false)
+    private String lastName;
 
     @Email
     @Column(nullable = false, name = "email", unique = true)
@@ -32,13 +41,11 @@ public class User {
 
     @JsonIgnore
     @Column(nullable = false, name="password")
-    @Size(min = 8 , max = 30 , message = "Password must be between 8 and 30")
-    @NotBlank
     private String password;
 
 
     @Enumerated(EnumType.STRING)
-    @NotBlank
+    @NotNull
     private USER_ROLE role;
 
     @Column(name = "created_at",nullable = false, updatable = false)
@@ -58,5 +65,4 @@ public class User {
     protected void onUpdate(){
         this.updated_at = LocalDateTime.now();
     }
-
 }
