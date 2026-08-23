@@ -25,6 +25,6 @@ public class RegistrationRequest {
     @Email(message = "Invalid email format")
     private String email;
 
-    @Size(min = 6, max = 30, message = "Password must be between 6 and 30")
+    @Size(min = 8, max = 30, message = "Password must be between 8 and 30")
     private String password;
 }
