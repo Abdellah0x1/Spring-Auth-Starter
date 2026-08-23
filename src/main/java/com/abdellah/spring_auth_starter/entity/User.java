@@ -24,6 +24,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
 
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+
+    @Column(name="last_name", nullable = false)
+    private String lastName;
+
     @Email
     @Column(nullable = false, name = "email", unique = true)
     @Size(min = 5, max = 60 , message = "Email length must be between 5 and 60")
