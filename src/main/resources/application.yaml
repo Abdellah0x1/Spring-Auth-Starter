@@ -20,5 +20,5 @@ logging:
   level:
     org.springframework: DEBUG
     org.hibernate.sql: DEBUG
-    org.springframework.security: DEBUG
+    org.springframework.security: TRACE
     com.abdellah.spring_auth_starter: DEBUG
