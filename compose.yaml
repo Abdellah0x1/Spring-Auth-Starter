@@ -12,6 +12,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
       JwtExpirationMS: ${JwtExpirationMS}
+      JWT_COOKIE_SECURE: ${JWT_COOKIE_SECURE}
+
     ports:
       - "8080:8080"
 

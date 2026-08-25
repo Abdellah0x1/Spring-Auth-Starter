@@ -4,6 +4,7 @@ package com.abdellah.spring_auth_starter.exception;
 import com.abdellah.spring_auth_starter.payload.APIResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,6 +36,12 @@ public class GlobalExceptionHandler {
         String message = e.getMessage();
         APIResponse apiResponse = new APIResponse(message, false);
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<APIResponse> AuthExceptionHandler(AuthenticationException e){
+        return new ResponseEntity<>(new APIResponse("Invalid Email or Password", false),HttpStatus.UNAUTHORIZED);
     }
 
 

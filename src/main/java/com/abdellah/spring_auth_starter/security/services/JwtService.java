@@ -6,10 +6,14 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -25,7 +29,33 @@ public class JwtService {
     @Value("${spring.jwt.expiration}")
     private int jwtExpirationInMs;
 
+    @Value("${spring.jwt.cookieName}")
+    private String jwtCookieName;
 
+    @Value("${spring.jwt.cookieSecure}")
+    private boolean jwtCookieSecure;
+
+    public ResponseCookie generatejwtCookie(UserDetailsImpl user){
+        String jwt = generateJwtTokenFromEmail(user.getEmail());
+        ResponseCookie cookie = ResponseCookie.from(jwtCookieName, jwt)
+                .path("/api")
+                .maxAge(24*60*60)
+                .httpOnly(true)
+                .secure(jwtCookieSecure)
+                .build();
+
+        logger.debug("Generated jwt cookie for user {} ", jwt);
+        return cookie;
+    }
+
+    public String getJwtFromCookie(HttpServletRequest request){
+        Cookie cookie = WebUtils.getCookie(request, jwtCookieName);
+        if(cookie != null){
+            return cookie.getValue();
+        }{
+            return null;
+        }
+    }
 
     public String generateJwtTokenFromEmail(String email){
         return Jwts.builder().subject(email).issuedAt(new Date()).expiration(new Date(new Date().getTime() + jwtExpirationInMs)).signWith(key()).compact();
@@ -57,6 +87,7 @@ public class JwtService {
         }
         return false;
     }
+
 
 
 }
