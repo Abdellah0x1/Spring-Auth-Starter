@@ -52,9 +52,9 @@ public class JwtService {
         Cookie cookie = WebUtils.getCookie(request, jwtCookieName);
         if(cookie != null){
             return cookie.getValue();
-        }{
-            return null;
         }
+        return null;
+
     }
 
     public String generateJwtTokenFromEmail(String email){

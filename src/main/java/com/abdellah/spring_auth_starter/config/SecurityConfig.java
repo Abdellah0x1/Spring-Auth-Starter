@@ -1,6 +1,7 @@
 package com.abdellah.spring_auth_starter.config;
 
 
+import com.abdellah.spring_auth_starter.security.jwt.AuthEntryPoint;
 import com.abdellah.spring_auth_starter.security.jwt.AuthTokenFilter;
 import com.abdellah.spring_auth_starter.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class SecurityConfig {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    AuthEntryPoint authEntryPoint;
+
     @Bean
     public SecurityFilterChain springSecurtyFilterChain(HttpSecurity http, AuthTokenFilter authTokenFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -33,7 +37,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 );
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
+        http.exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint));
         return http.build();
     }
 

@@ -59,7 +59,6 @@ public class AuthController {
         UserDetailsImpl  userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
 
-        assert userDetails != null;
         ResponseCookie authCookie = jwtService.generatejwtCookie(userDetails);
 
         String role = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0);
