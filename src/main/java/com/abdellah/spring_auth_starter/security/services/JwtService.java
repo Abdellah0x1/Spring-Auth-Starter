@@ -61,6 +61,15 @@ public class JwtService {
         return Jwts.builder().subject(email).issuedAt(new Date()).expiration(new Date(new Date().getTime() + jwtExpirationInMs)).signWith(key()).compact();
     }
 
+    public String getEmailFromJwtToken(String jwtToken){
+        return Jwts.parser()
+                .verifyWith((SecretKey) key())
+                .build()
+                .parseSignedClaims(jwtToken)
+                .getPayload()
+                .getSubject();
+    }
+
     private Key key(){
         return  Keys.hmacShaKeyFor(
                 Decoders.BASE64URL.decode(jwtSecret)
