@@ -57,6 +57,11 @@ public class JwtService {
 
     }
 
+    public ResponseCookie getCleanJwtCookie(){
+        ResponseCookie cookie = ResponseCookie.from(jwtCookieName,null).path("/api").build();
+        return cookie;
+    }
+
     public String generateJwtTokenFromEmail(String email){
         return Jwts.builder().subject(email).issuedAt(new Date()).expiration(new Date(new Date().getTime() + jwtExpirationInMs)).signWith(key()).compact();
     }

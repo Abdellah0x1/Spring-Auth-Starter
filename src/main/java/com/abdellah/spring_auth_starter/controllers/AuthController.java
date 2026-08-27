@@ -56,4 +56,11 @@ public class AuthController {
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, authCookie.toString()).body(userDTO);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(){
+        ResponseCookie cleanCookie = jwtService.getCleanJwtCookie();
+
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cleanCookie.toString()).body(new MessageResponse("You have been logged out"));
+    }
 }

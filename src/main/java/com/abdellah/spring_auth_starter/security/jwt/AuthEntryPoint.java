@@ -14,17 +14,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
 @Component
 public class AuthEntryPoint implements AuthenticationEntryPoint {
     private static final Logger logger = LoggerFactory.getLogger(AuthEntryPoint.class);
+
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException authException) throws IOException, ServletException {
         logger.error("Unauthorized request : {} ", authException.getMessage());
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        final Map<String,Object> body = new HashMap<>();
+        final Map<String, Object> body = new HashMap<>();
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("message", authException.getMessage());
         body.put("error", "UNAUTHORIZED");
