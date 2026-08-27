@@ -1,36 +1,25 @@
 package com.abdellah.spring_auth_starter.controllers;
 
 
-import com.abdellah.spring_auth_starter.entity.User;
 import com.abdellah.spring_auth_starter.enums.USER_ROLE;
 import com.abdellah.spring_auth_starter.payload.UserDTO;
-import com.abdellah.spring_auth_starter.repository.UserRepository;
 import com.abdellah.spring_auth_starter.security.requests.LoginRequest;
 import com.abdellah.spring_auth_starter.security.requests.RegistrationRequest;
 import com.abdellah.spring_auth_starter.security.responses.MessageResponse;
 import com.abdellah.spring_auth_starter.security.services.JwtService;
 import com.abdellah.spring_auth_starter.security.services.UserDetailsImpl;
 import com.abdellah.spring_auth_starter.services.AuthService;
-import com.nimbusds.openid.connect.sdk.federation.utils.JWTUtils;
-import jakarta.servlet.http.Cookie;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
