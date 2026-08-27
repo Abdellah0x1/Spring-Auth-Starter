@@ -1,6 +1,7 @@
 package com.abdellah.spring_auth_starter.config;
 
 
+import com.abdellah.spring_auth_starter.security.jwt.AuthTokenFilter;
 import com.abdellah.spring_auth_starter.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
@@ -23,13 +25,14 @@ public class SecurityConfig {
     UserDetailsServiceImpl userDetailsService;
 
     @Bean
-    public SecurityFilterChain springSecurtyFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain springSecurtyFilterChain(HttpSecurity http, AuthTokenFilter authTokenFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests ->
                         requests.requestMatchers("/api/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 );
+        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
