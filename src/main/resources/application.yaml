@@ -22,6 +22,8 @@ spring:
     cookieSecure: ${JWT_COOKIE_SECURE:false}
 
 
+
+
 logging:
   level:
     org.springframework: DEBUG
