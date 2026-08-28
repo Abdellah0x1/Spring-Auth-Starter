@@ -8,7 +8,6 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
 
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -25,9 +24,11 @@ spring:
     allowed-origins:
       - "http://localhost:3000"
       - "http://localhost:5173"
+
 logging:
   level:
     org.springframework: DEBUG
     org.hibernate.sql: DEBUG
     org.springframework.security: TRACE
     com.abdellah.spring_auth_starter: DEBUG
+
