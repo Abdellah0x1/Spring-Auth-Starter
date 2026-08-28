@@ -21,7 +21,11 @@ spring:
     cookieName: "jwtCookie"
     cookieSecure: ${JWT_COOKIE_SECURE:false}
 
-
+  cors:
+    allowed-origins:
+      - "http://localhost:3000"
+      - "http://localhost:5173"
+    
 logging:
   level:
     org.springframework: DEBUG
