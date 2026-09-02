@@ -1,15 +1,17 @@
 package com.abdellah.spring_auth_starter.repository;
 
+import com.abdellah.spring_auth_starter.entity.RefreshToken;
 import com.abdellah.spring_auth_starter.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
+    Optional<RefreshToken> findByToken(String token);
 
-    Optional<User> findByEmail(String email);
 
-    Boolean existsByEmail(String email);
+    void deleteByUser(User user);
 }
