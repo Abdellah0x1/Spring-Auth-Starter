@@ -1,12 +1,16 @@
 package com.abdellah.spring_auth_starter.controllers;
 
 
+import com.abdellah.spring_auth_starter.entity.RefreshToken;
+import com.abdellah.spring_auth_starter.entity.User;
 import com.abdellah.spring_auth_starter.enums.USER_ROLE;
 import com.abdellah.spring_auth_starter.payload.UserDTO;
+import com.abdellah.spring_auth_starter.repository.RefreshTokenRepository;
 import com.abdellah.spring_auth_starter.security.requests.LoginRequest;
 import com.abdellah.spring_auth_starter.security.requests.RegistrationRequest;
 import com.abdellah.spring_auth_starter.security.responses.MessageResponse;
 import com.abdellah.spring_auth_starter.security.services.JwtService;
+import com.abdellah.spring_auth_starter.security.services.RefreshTokenService;
 import com.abdellah.spring_auth_starter.security.services.UserDetailsImpl;
 import com.abdellah.spring_auth_starter.services.AuthService;
 import jakarta.validation.Valid;
@@ -28,6 +32,12 @@ public class AuthController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private RefreshTokenService refreshTokenService;
+
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
 
 
     @PostMapping("/register")
@@ -62,10 +72,31 @@ public class AuthController {
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cleanCookie.toString()).body(new MessageResponse("You have been logged out"));
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@CookieValue(name="refreshToken") String refreshTokenString){
+
+
+        RefreshToken refreshToken = refreshTokenService.verifyRefreshToken(refreshTokenString);
+
+        User user= refreshToken.getUser();
+
+        UserDetailsImpl userDetails = UserDetailsImpl.build(user);
+
+
+        ResponseCookie newJwtCookie = jwtService.generatejwtCookie(userDetails);
+        String role = userDetails.getAuthorities().stream().findFirst().get().getAuthority();
+
+        UserDTO userDTO = new UserDTO(user.getFirstName(), user.getLastName(), userDetails.getEmail(), USER_ROLE.valueOf(role));
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, newJwtCookie.toString()).body(userDTO);
+
+    }
+
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getMe(){
         UserDTO userDTO = authService.getCurrentUser();
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
+
+
 }
