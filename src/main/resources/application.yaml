@@ -19,6 +19,8 @@ spring:
     expiration: ${JwtExpirationMS}
     cookieName: "jwtCookie"
     cookieSecure: ${JWT_COOKIE_SECURE:false}
+  refreshtoken:
+    expiration: ${RefreshTokenExpirationMS}
 
   cors:
     allowed-origins:

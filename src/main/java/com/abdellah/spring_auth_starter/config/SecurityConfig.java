@@ -50,11 +50,9 @@ public class SecurityConfig {
     public SecurityFilterChain springSecurtyFilterChain(HttpSecurity http, AuthTokenFilter authTokenFilter) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests ->
                         requests.requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/logout").permitAll()
-                                .requestMatchers("/api//admin/**").hasAnyAuthority("ADMIN")
                                 .anyRequest().authenticated()
                 );
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
@@ -70,7 +68,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider doaAuthenticationProvier(){
+    public DaoAuthenticationProvider doaAuthenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
